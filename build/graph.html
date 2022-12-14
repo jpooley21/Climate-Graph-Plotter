@@ -22,8 +22,8 @@
                     &#9776;
                 </button>
                 <nav class="hidden sm:block space-x-8 text-xl" aria-label="main">
-                    <a href="index.html" class="link hover:opacity-90">Climate</a>
-                    <a href="graph.html" class="link hover:opacity-90">Data</a>
+                    <a href="index.html" class="link hover:opacity-90">Home</a>
+                    <a href="graph.html" class="link hover:opacity-90">Interactive</a>
                     <a href="#sources" class="link hover:opacity-90">Sources</a>
                     <a href="#contact" class="link hover:opacity-90">Contact </a>
                 </nav>
@@ -32,13 +32,37 @@
     </header>
     
     <main class="max-w-4xl mx-auto">
+      
+      <label for="datasets" class="p-1 block mb-2 text-sm font-medium text-gray-900 dark:text-white">Data source</label>
+        <select id="datasets" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+          <option selected>--Choose data source--</option>
+          <option value="CR">CRUTEM5</option>
+          <option value="HC">HADCRUT4</option>
+          <option value="GI">GISTEMP</option>
+        </select>
+
+      <label for="processSteps" class="p-1 block mb-2 text-sm font-medium text-gray-900 dark:text-white">Processing steps</label>
+        <select id="processSteps" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-40 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+          <option selected>--</option>
+          <option value="LT">Linear trend</option>
+          <option value="AV">Average</option>
+          <option value="NM">Normalise</option>
+        </select>
+      
+      <table class = "steps">
+        <tbody>
+
+        </tbody>
+      </table>
+        
+
         <div id="my_dataviz"></div>
 
         <script>
 
             // set the dimensions and margins of the graph
             var margin = {top: 10, right: 30, bottom: 30, left: 60},
-                width = 650 - margin.left - margin.right,
+                width = 800 - margin.left - margin.right,
                 height = 400 - margin.top - margin.bottom;
             
             // append the svg object to the body of the page
@@ -97,7 +121,7 @@
                 svg.append("path")
                   .datum(data)
                   .attr("fill", "none")
-                  .attr("stroke", "steelblue")
+                  .attr("stroke", "red")
                   .attr("stroke-width", 1.5)
                   .attr("d", d3.line()
                     .x(function(d) { return x(d.Time) })
