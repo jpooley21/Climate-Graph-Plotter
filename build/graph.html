@@ -34,12 +34,14 @@
     <main class="max-w-4xl mx-auto">
       
       <label for="datasets" class="p-1 block mb-2 text-sm font-medium text-gray-900 dark:text-white">Data source</label>
-        <select id="datasets" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-          <option selected>--Choose data source--</option>
-          <option value="CR">CRUTEM5</option>
-          <option value="HC">HADCRUT4</option>
-          <option value="GI">GISTEMP</option>
+        <select id="dataSets" onchange = "dataChange()" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+          <!-- <option selected>--Choose data source--</option> -->
+          <option value="1">CRUTEM5</option>
+          <option value="2">HADCRUT5</option>
+          <option value="3">GISTEMP</option>
         </select>
+
+      
 
       <label for="processSteps" class="p-1 block mb-2 text-sm font-medium text-gray-900 dark:text-white">Processing steps</label>
         <select id="processSteps" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-40 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
@@ -48,17 +50,46 @@
           <option value="AV">Average</option>
           <option value="NM">Normalise</option>
         </select>
-      
-      <table class = "steps">
-        <tbody>
 
-        </tbody>
-      </table>
+      
+        
+        <p id = "demo" class = "p-1"></p>
+        <div id="dataviz"></div>
+
         
 
-        <div id="my_dataviz"></div>
-
         <script>
+
+            data1 = "dataSets/CRUTEM5.csv";
+            data2 = "dataSets/HADCRUT5.csv";
+            data3 = "dataSets/GISTEMP4.csv";
+
+            // var mymap = {
+            //   1: data1,
+            //   2: data2,
+            //   3: data3
+            // }
+
+            
+            
+
+            // function dataChange() {
+            //   var city = document.getElementById("dataSets").value;
+            //   var text = mymap[city] || ' ';
+            //   document.getElementById("demo").innerHTML = text;
+            //   dataSet = text;
+            //   // console.log(dataSet);
+              
+            //   return dataSet;
+            // }
+
+        
+            // dataSet = document.getElementById("demo").innerHTML;
+            // console.log(dataSet);
+            
+            // document.write(dataSet);
+
+            
 
             // set the dimensions and margins of the graph
             var margin = {top: 10, right: 30, bottom: 30, left: 60},
@@ -66,22 +97,46 @@
                 height = 400 - margin.top - margin.bottom;
             
             // append the svg object to the body of the page
-            var svg = d3.select("#my_dataviz")
+            var svg = d3.select("#dataviz")
               .append("svg")
                 .attr("width", width + margin.left + margin.right)
                 .attr("height", height + margin.top + margin.bottom)
+
               .append("g")
                 .attr("transform",
                       "translate(" + margin.left + "," + margin.top + ")");
+
+                
             
-            //Read the data
-            d3.csv("CRUTEM5.csv",
-            
+            // switch (document.getElementById("dataSets").value) {
+            //   case 1: 
+            //     dataSet = data1;
+            //     console.log(data1);
+            //     break;
+            //   case 2: 
+            //     dataSet = data2;
+            //     console.log(data2);
+            //     break;
+            //   case 3: 
+            //     dataSet = data3;
+            //     console.log(data3);
+            //     break;
+            // }
+
+            //Read the dat
+
+                        
+
+
+            d3.csv(data3,
+
               // When reading the csv, I must format variables:
               function(d){
                 return { Time : d3.timeParse("%Y")(d.Time), Anomaly : d.Anomaly }
               },
-            
+          
+
+
               // Now I can use this dataset:
               function(data) {
             
@@ -100,6 +155,18 @@
                 svg.append("g")
                   .call(d3.axisLeft(y));
 
+                
+                // Horizontal Zero Line
+                svg.append("g")
+                  .attr("transform", "translate(0, "+y(0)+")")
+                  .append("line")
+                  .attr("x2",width)
+                  .style('stroke','grey')
+                  .style("stroke-dasharray", "5, 3")
+                  .style("stroke-width","2px");
+                
+
+              
                 // X label
                 svg.append("text")
                     .attr("class", "x label")
@@ -112,7 +179,7 @@
                 svg.append("text")
                     .attr("class", "y label")
                     .attr("text-anchor","end")
-                    .attr("y", 6)
+                    .attr("y", 7)
                     .attr("dy", ".75em")
                     .attr("transform","rotate(-90)")
                     .text("Temperature Anomaly");
@@ -129,7 +196,14 @@
                     )
             
             })
+
+            document.getElementById("defaultInput")
+              .onclick = defaultFunction;
+              
+            document.getElementById("updateInput")
+              .onclick = updateFunction;
             
+            defaultFunction();
             </script>
 
 
