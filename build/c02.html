@@ -24,7 +24,8 @@
                 </button>
                 <nav class="hidden sm:block space-x-8 text-xl" aria-label="main">
                     <a href="index.html" class="link hover:opacity-90">Home</a>
-                    <a href="graph.html" class="link hover:opacity-90">Interactive</a>
+                    <a href="temperature.html" class="link hover:opacity-90">Temp</a>
+                    <a href="c02.html" class="link hover:opacity-90">C02</a>
                     <a href="#sources" class="link hover:opacity-90">Sources</a>
                     <a href="#contact" class="link hover:opacity-90">Contact </a>
                 </nav>
@@ -36,10 +37,10 @@
       
       <label for="datasets" class="p-1 block mb-2 text-sm font-medium text-gray-900 dark:text-white">Data source</label>
         <select id="dataSets" onchange = "dataChange()" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-          <!-- <option selected>--Choose data source--</option> -->
-          <option value="1">CRUTEM5</option>
-          <option value="2">HADCRUT5</option>
-          <option value="3">GISTEMP</option>
+          <option selected>--Choose data source--</option>
+          <option value="1">C021</option>
+          <option value="2">C022</option>
+          <option value="3">C023</option>
         </select>
 
       
@@ -61,7 +62,7 @@
 
         <script>
 
-            data1 = "dataSets/CRUTEM5.csv";
+            data1 = "dataSets/c02.csv";
             data2 = "dataSets/HADCRUT5.csv";
             data3 = "dataSets/GISTEMP4.csv";
 
@@ -130,7 +131,7 @@
 
                 // When reading the csv, I must format variables:
                 function(d){
-                  return { Time : d3.timeParse("%Y")(d.Time), Anomaly : d.Anomaly }
+                  return { Time : d3.timeParse("%Y")(d.Time), PPM : d.PPM }
                 },
             
 
@@ -166,7 +167,7 @@
               
                   // Add Y axis
                   var y = d3.scaleLinear()
-                    .domain([-1, d3.max(data, function(d) { return d.Anomaly; })])
+                    .domain(d3.extent(data, function(d) { return d.PPM; }))
                     .range([ height, 0 ]);
                   svg.append("g")
                     .call(d3.axisLeft(y));
@@ -207,7 +208,7 @@
                       .attr("y", 7)
                       .attr("dy", ".75em")
                       .attr("transform","rotate(-90)")
-                      .text("Temperature Anomaly");
+                      .text("c02 (PPM)");
               
                   // Add the line
                   svg.append("path")
@@ -217,7 +218,7 @@
                     .attr("stroke-width", 1.5)
                     .attr("d", d3.line()
                       .x(function(d) { return x(d.Time) })
-                      .y(function(d) { return y(d.Anomaly) })
+                      .y(function(d) { return y(d.PPM) })
                       )
               
               })
