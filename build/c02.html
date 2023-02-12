@@ -23,11 +23,13 @@
                     &#9776;
                 </button>
                 <nav class="hidden sm:block space-x-8 text-xl" aria-label="main">
-                    <a href="index.html" class="link hover:opacity-90">Home</a>
-                    <a href="temperature.html" class="link hover:opacity-90">Temp</a>
-                    <a href="c02.html" class="link hover:opacity-90">C02</a>
-                    <a href="#sources" class="link hover:opacity-90">Sources</a>
-                    <a href="#contact" class="link hover:opacity-90">Contact </a>
+                  <a href="index.html" class="link hover:opacity-90">Home</a>
+                  <a href="temperature.html" class="link hover:opacity-90">Temp</a>
+                  <a href="tempCombined.html" class="link hover:opacity-90">TempSeries</a>
+                  <a href="c02.html" class="link hover:opacity-90">C02</a>
+                  <a href="seaice.html" class="link hover:opacity-90">Sea Ice</a>
+                  <a href="#sources" class="link hover:opacity-90">Sources</a>
+                  <a href="#contact" class="link hover:opacity-90">Contact </a>
                 </nav>
             </div>
        </section> 
@@ -38,7 +40,7 @@
       <label for="datasets" class="p-1 block mb-2 text-sm font-medium text-gray-900 dark:text-white">Data source</label>
         <select id="dataSets" onchange = "dataChange()" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
           <option selected>--Choose data source--</option>
-          <option value="1">C021</option>
+          <option value="1">NOAAGML</option>
           <option value="2">C022</option>
           <option value="3">C023</option>
         </select>
@@ -62,7 +64,7 @@
 
         <script>
 
-            data1 = "dataSets/c02.csv";
+            data1 = "dataSets/NOAAGML.csv";
             data2 = "dataSets/HADCRUT5.csv";
             data3 = "dataSets/GISTEMP4.csv";
 

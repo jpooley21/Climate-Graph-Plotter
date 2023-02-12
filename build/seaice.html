@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Climate Tool</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src = "https://d3js.org/d3.v5.js"></script>
+</head>
+<body class = "min-h-screen bg-slate-50 dark:bg-black dark:text-white">
+    <header class = "bg-teal-700 text-white sticky top-0 z-10">
+       <section class="max-w-4xl mx-auto p-4 flex justify-between items-center">
+            <h1 class="text-3xl font-medium">
+                <a>
+                    The Climate Tool
+                </a>
+            </h1>
+
+            <div>
+                <button id="mobile-open-button" class="text-3xl sm:hidden focus:outline-none">
+                    &#9776;
+                </button>
+                <nav class="hidden sm:block space-x-8 text-xl" aria-label="main">
+                    <a href="index.html" class="link hover:opacity-90">Home</a>
+                    <a href="temperature.html" class="link hover:opacity-90">Temp</a>
+                    <a href="tempCombined.html" class="link hover:opacity-90">TempSeries</a>
+                    <a href="c02.html" class="link hover:opacity-90">C02</a>
+                    <a href="seaice.html" class="link hover:opacity-90">Sea Ice</a>
+                    <!-- <a href="#sources" class="link hover:opacity-90">Sources</a>
+                    <a href="#contact" class="link hover:opacity-90">Contact </a> -->
+                </nav>
+            </div>
+       </section> 
+    </header>
+    
+    <main class="max-w-4xl mx-auto">
+    <div id = "dataviz"></div>
+
+    <script>
+
+    d3 = require("d3@5", "d3-array@2");
+
+    import {legend} from "@d3/color-legend";
+
+    replay;
+
+
+    const svg = d3.select("#dataviz")
+        .append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+
+    svg.append("g")
+        .call(xAxis);
+
+    svg.append("g")
+        .call(yAxis);
+
+    const g = svg.append("g")
+        .attr("font-family", "sans-serif")
+        .attr("font-size",10)
+        .attr("fill", "none")
+        .attr("stroke-width", 1.5)
+        .attr("stroke-miterlimit", 1);
+
+    for (const [key, values] of d3.group(data, d => d.date.getUTCFullYear())) {
+        yield svg.node();
+
+        await g.append("path")
+                .attr("d", line(values))
+                .attr("stroke", z(key))
+                .attr("stoke-dasharray", "0.1")
+            .transition()
+                .ease(d3.easeLinear)
+                .attrTween("stroke-dasharray", dashTween)
+            .end();
+        if (!isNaN(values[values.length - 1].value)) {
+            g.append("text")
+                .attr("stroke", "white")
+                .attr("stroke-width",3)
+                .attr("dx", 4)
+                .attr("dy", "0.32.em")
+                .attr("x", x(intrayear(values[values.length - 1].date)))
+                .attr("y", y(values[values.length - 1].value))
+                .text(key)
+            .clone(true)
+                .attr("fill", z(key))
+                .attr("stroke", "none");
+        }
+    }
+
+
+    function dashTween() {
+        const length = this.getTotalLength();
+        return d3.interpolate(`0,${length}`,`${length},${length}`);
+    }
+
+    var margin = {top: 10, right: 30, bottom: 30, left: 60},
+                width = 800 - margin.left - margin.right,
+                height = 400 - margin.top - margin.bottom;
+
+    function intrayear(date) {
+        date = new Date(+date);
+        date.setUTCFullYear(2000);
+        return date;
+    }
+
+    x = d3.scaleUtc([Date.UTC(2000, 0, 1), Date.UTC(2001,0,0)], [margin.left, width - margin.right])
+
+    y = d3.scaleLinear([0, d3.max(data, d => d.value)], [height - margin.bottom, margin.top])
+
+    z = d3.scaleSequential(d3.extent(data, d => d.date.getUTCFullYear()), t => d3.interpolateSpectral(1-t))
+
+    xAxis = g => g
+        .attr("transform", `translate(${margin.left},0)`)
+        .call(d3.axisLeft(y).ticks(null, "s"))
+        .call(g => g.select(".domain").remove())
+        .call(g => g.selectAll(".tick:not:(first-of-type) line").clone()
+            .attr("x2", width)
+            .attr("stroke", "#ddd"))
+        .call(g => g.select(".tick:last-of-type text").clone()
+            .attr("x",3)
+            .attr("text-anchor", "start")
+            .attr("font-weight", "bold")
+            .text(data.y))
+
+    line = d3.line()
+        .defined(d => !isNaN(d.value))
+        .x(d => x(intrayear(d.date)))
+        .y(d => y(d.value))
+    
+    data = d3.csv("dataSets/SEAICE.csv")
+    .text(), ({date,extent}) => ({date: new Date(date), value: 1e6 * extent})
+    .sort((a,b)=> a.date - b.date), {y: "km^2"}
+
+    
+    </script>
+
+
+    </main>
+    
+</body>
+</html>
