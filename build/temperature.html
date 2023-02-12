@@ -28,8 +28,8 @@
                     <a href="tempCombined.html" class="link hover:opacity-90">TempSeries</a>
                     <a href="c02.html" class="link hover:opacity-90">C02</a>
                     <a href="seaice.html" class="link hover:opacity-90">Sea Ice</a>
-                    <a href="#sources" class="link hover:opacity-90">Sources</a>
-                    <a href="#contact" class="link hover:opacity-90">Contact </a>
+                    <!-- <a href="#sources" class="link hover:opacity-90">Sources</a>
+                    <a href="#contact" class="link hover:opacity-90">Contact </a> -->
                 </nav>
             </div>
        </section> 
@@ -55,14 +55,13 @@
           <option value="NM">Normalise</option>
         </select>
 
-      
-        
         <p id = "demo" class = "p-1"></p>
         <div id="dataviz"></div>
 
         
 
         <script>
+
 
             data1 = "dataSets/CRUTEM5.csv";
             data2 = "dataSets/HADCRUT5.csv";
@@ -104,7 +103,7 @@
               d3.selectAll("svg").remove();
             }
 
-            function createGraph(dataSet,name)
+            function createGraph(dataSet)
             {
 
             // var line = d3.svg.line()
@@ -192,9 +191,7 @@
                     .style('stroke','grey')
                     .style("stroke-dasharray", "5, 3")
                     .style("stroke-width","2px");
-                  
-
-                
+   
                   // X label
                   svg.append("text")
                       .attr("class", "x label")

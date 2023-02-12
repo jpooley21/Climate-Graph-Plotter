@@ -8,6 +8,9 @@
     <link rel="stylesheet" href="css/style.css">
     <script src = "https://d3js.org/d3.v4.js"></script>
     <script src="https://npmcdn.com/simple-statistics@2.0.0-beta3/dist/simple-statistics.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.js"></script>
+
+
 </head>
 <body class = "min-h-screen bg-slate-50 dark:bg-black dark:text-white">
     <header class = "bg-teal-700 text-white sticky top-0 z-10">
@@ -56,6 +59,23 @@
         </select> -->
 
       
+        <label for = "CRU"><span></span>CRUTEM5</label>
+        <input type = "checkbox" id = "CRU" name = "cc" onclick = "checkFunction('CRUTEM5','CRU')">
+        <br/>
+        <label for = "HAD"><span></span>HADCRUT5</label>
+        <input type = "checkbox" id = "HAD" name = "cc" onclick = "checkFunction('HADCRUT5','HAD')">
+        <br/>
+        <label for = "GIS"><span></span>GISTEMP4</label>
+        <input type = "checkbox" id = "GIS" name = "cc" onclick = "checkFunction('GISTEMP4','GIS')">
+        <br/>
+
+        <button id = "submit" type = "button">Submit</button>
+
+        <p id = "CRUTEM5" style = "display:none">CRUTEM5 selected</p>
+        <p id = "HADCRUT5" style = "display:none">HADCRUT5 selected</p>
+        <p id = "GISTEMP4" style = "display:none">GISTEMP4 selected</p>
+        
+
         
         <p id = "demo" class = "p-1"></p>
         <div id="chart"></div>
@@ -64,44 +84,62 @@
 
         <script>
 
+            function checkFunction(dataSet,ID) {
+              var CB = document.getElementById(ID);
+              var text = document.getElementById(dataSet);
+
+
+              if (CB.checked == true){
+                text.style.display = "block";
+              } else {
+                text.style.display = "none";
+              }
+            }
+
+            $("#submit").on("click", function(){
+              var check = $('input:checked:checkbox[name=cc]');
+              var id = '';
+              $.each($(check), function(index) {
+                id += $(this).attr('id');
+              });
+              if ($(check).is(':checked')) {
+                switch (id) {
+                  case 'CRU':
+                    console.log(id);
+                    break;
+                  case 'HAD':
+                    console.log(id);
+                    break;
+                  case 'GIS':
+                    console.log(id);
+                    break;
+                  case 'CRUHAD':
+                    console.log(id);
+                    break;
+                  case 'CRUGIS':
+                    console.log(id);
+                    break;
+                  case 'CRUHADGIS':
+                    console.log(id);
+                    break;
+                  case 'HADGIS':
+                    console.log(id);
+                    break;
+                }
+              } else {
+                alert('Please select one or more datasets');
+              }
+            });
+
             var data = d3.json("dataSets/data.json", function(d) {
               console.log(d);
             });
 
             var data = "dataSets/data.json";
 
-            
-            
-            // [
-            //   {
-            //     name:"CRUTEM5",
-            //     values: [
-            //       {date: "2000", anomaly: "0.46"},
-            //       {date: "2001", anomaly: "0.66"},
-            //       {date: "2002", anomaly: "0.76"}
+           
 
-            //     ]
-            //   },
-            //   {
-            //     name: "GISTEMP4",
-            //     values: [
-            //       {date: "2000", anomaly: "0.39"},
-            //       {date: "2001", anomaly: "0.53"},
-            //       {date: "2002", anomaly: "0.63"}
-            //     ]
-            //   },
-            //   {
-            //     name: "HADRUT5",
-            //     values: [
-            //       {date: "2000", anomaly: "0.33"},
-            //       {date: "2001", anomaly: "0.48"},
-            //       {date: "2002", anomaly: "0.54"}
-              
-            //     ]
-            //   }
-            // ];
-
-            var width = 800;
+            var width = 900;
             var height = 600;
             var margin = 50;
             var duration = 100;
@@ -118,7 +156,7 @@
             var circleRadiusHover = 6;
 
 
-            // Format Data 
+            // Import JSON and Format Data 
             d3.json("dataSets/data.json", function(data){
               
             
@@ -139,7 +177,7 @@
               .range([0, width-margin]);
 
             var yScale = d3.scaleLinear()
-              .domain([-1, d3.max(data[0].values, d => d.anomaly)])
+              .domain([-1, d3.max(data[1].values, d => d.anomaly)])
               .range([height-margin, 0]);
 
             var color = d3.scaleOrdinal(d3.schemeCategory10);
@@ -159,25 +197,29 @@
             let lines = svg.append('g')
               .attr('class', 'lines');
 
+
+            // Top text  
             lines.selectAll('.line-group')
               .data(data).enter()
               .append('g')
               .attr('class', 'line-group')
+              // Appear on when mouse over line
               .on("mouseover", function(d,i){
                 svg.append("text")
                   .attr("class", "title-text")
                   .style("fill",color(i))
+                  // name of dataset
                   .text(d.name)
                   .attr("text-anchor", "middle")
                   .attr("x", (width-margin)/2)
                   .attr("y",5);
               })
+            // Remove when mouse leaves
             .on("mouseout",function(d){
               svg.select(".title-text").remove();
             })
 
             
-
             .append('path')
             .attr('class','line')
             .attr('d', d => line(d.values))
@@ -217,9 +259,10 @@
                   .style("cursor", "pointer")
                   .append("text")
                   .attr("class", "text")
-                  .text(`${d.anomaly}`)
-                  .attr("x", d => xScale(d.date)+5)
-                  .attr("y", d => yScale(d.anomaly) -10);
+                  // Round value to 2 decimal places
+                  .text(`${(Math.round((d.anomaly + Number.EPSILON)*100)/100)}`)
+                  .attr("x", d => xScale(d.date))
+                  .attr("y", d => yScale(d.anomaly));
               })
             .on("mouseout", function(d) {
               d3.select(this)
@@ -256,21 +299,33 @@
 
           
           
-
+          // X Label
           svg.append("g")
             .attr("class", "x axis")
+            .attr("text-anchor","end")
             .attr("transform", `translate(0, ${height-margin})`)
+            .text("Year")
             .call(xAxis);
-          
+            
+
+          // Y Label
           svg.append("g")
             .attr("class", "y axis")
             .call(yAxis)
             .append('text')
             .attr("y",15)
             .attr("fill", "#000")
-            .text("Temp Anomaly");
+            .attr("transform","rotate(-90)")
+            .text("Temperature Anomaly");
 
-          
+          // zero line  
+          svg.append("g")
+            .attr("transform", "translate(0, "+ yScale(0)+")")
+            .append("line")
+            .attr("x2",(width-50))
+            .style('stroke','grey')
+            .style("stroke-dasharray", "5, 3")
+            .style("stroke-width","2px");
 
             })
               
