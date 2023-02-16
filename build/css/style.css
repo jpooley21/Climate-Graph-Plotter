@@ -772,6 +772,8 @@ video {
   fill: none;
 }
 
+
+
 @media (prefers-color-scheme: dark) {
   .dark\:border-gray-600 {
     --tw-border-opacity: 1;
