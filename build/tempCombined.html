@@ -58,12 +58,11 @@
           <option value="NM">Normalise</option>
         </select> -->
 
-      
-        <label for = "CRU"><span></span>CRUTEM5</label>
-        <input type = "checkbox" id = "CRU" name = "cc" onclick = "checkFunction('CRUTEM5','CRU')">
-        <br/>
         <label for = "HAD"><span></span>HADCRUT5</label>
         <input type = "checkbox" id = "HAD" name = "cc" onclick = "checkFunction('HADCRUT5','HAD')">
+        <br/>
+        <label for = "CRU"><span></span>CRUTEM5</label>
+        <input type = "checkbox" id = "CRU" name = "cc" onclick = "checkFunction('CRUTEM5','CRU')">
         <br/>
         <label for = "GIS"><span></span>GISTEMP4</label>
         <input type = "checkbox" id = "GIS" name = "cc" onclick = "checkFunction('GISTEMP4','GIS')">
@@ -71,8 +70,8 @@
 
         <button id = "submit" type = "button">Submit</button>
 
-        <p id = "CRUTEM5" style = "display:none">CRUTEM5 selected</p>
         <p id = "HADCRUT5" style = "display:none">HADCRUT5 selected</p>
+        <p id = "CRUTEM5" style = "display:none">CRUTEM5 selected</p>
         <p id = "GISTEMP4" style = "display:none">GISTEMP4 selected</p>
         
 
@@ -96,6 +95,8 @@
               }
             }
 
+            
+
             $("#submit").on("click", function(){
               var check = $('input:checked:checkbox[name=cc]');
               var id = '';
@@ -104,40 +105,63 @@
               });
               if ($(check).is(':checked')) {
                 switch (id) {
-                  case 'CRU':
-                    console.log(id);
-                    break;
                   case 'HAD':
                     console.log(id);
+                    removeGraph();
+                    createGraph(id);
+                    break;
+                  case 'CRU':
+                    console.log(id);
+                    removeGraph();
+                    createGraph(id);
                     break;
                   case 'GIS':
                     console.log(id);
+                    removeGraph();
+                    createGraph(id);
                     break;
-                  case 'CRUHAD':
+                  case 'HADCRU':
                     console.log(id);
+                    removeGraph();
+                    createGraph(id);
                     break;
                   case 'CRUGIS':
                     console.log(id);
+                    removeGraph();
+                    createGraph(id);
                     break;
-                  case 'CRUHADGIS':
+                  case 'HADCRUGIS':
                     console.log(id);
+                    removeGraph();
+                    createGraph(id);
                     break;
                   case 'HADGIS':
                     console.log(id);
+                    removeGraph();
+                    createGraph(id);
                     break;
                 }
               } else {
+                removeGraph();
                 alert('Please select one or more datasets');
               }
             });
 
-            var data = d3.json("dataSets/data.json", function(d) {
-              console.log(d);
-            });
+            function removeGraph()
+            {
+              d3.selectAll("svg").remove();
+            }
 
-            var data = "dataSets/data.json";
 
-           
+
+            function createGraph(codeId){
+            // var data = d3.json("dataSets/data.json", function(d) {
+              
+            //   array1 = d.at(1) 
+            //   array2 = d.at(2);
+            //   array3 = {array1,array2};
+            //   console.log(array3);
+            // });
 
             var width = 900;
             var height = 600;
@@ -158,10 +182,65 @@
 
             // Import JSON and Format Data 
             d3.json("dataSets/data.json", function(data){
+
+              // for (let i = 0; i < arguments.length; i++) {
+              //   console.log(data.arguments[i]);
+              // } 
               
+            console.log(codeId);
+            console.log(data);
+
+           
+            
+            switch(codeId){
+              case 'HAD':
+                data = data.at(0);
+                console.log(data);
+                
+                break;
+              case 'CRU':
+                data = data.at(1);
+                console.log(data);
+                break;
+              case 'GIS':
+                arr1 = data.at(2);
+                
+                var data = [];
+                data.push(arr1);
+                console.log(data);
+                break;
+              case 'HADCRU':
+                arr1 = data.at(0);
+                arr2 = data.at(1);
+                
+                var data = [];
+                data.push(arr1,arr2);
+                console.log(data);
+                break;
+              case 'HADGIS':
+                arr1 = data.at(0);
+                arr2 = data.at(2);
+                
+                var data = [];
+                data.push(arr1,arr2);
+                console.log(data);
+                break;
+              case 'CRUGIS':
+                arr1 = data.at(1);
+                arr2 = data.at(2);
+                
+                var data = [];
+                data.push(arr1,arr2);
+                console.log(data); 
+                break;
+              case 'HADCRUGIS':
+                data = data;
+                break; 
+            }
             
 
             var parseDate = d3.timeParse("%Y");
+            
             data.forEach(function(d) {
               d.values.forEach(function(d) {
                 d.date = parseDate(d.date);
@@ -328,7 +407,7 @@
             .style("stroke-width","2px");
 
             })
-              
+          }
           
             
             </script>
