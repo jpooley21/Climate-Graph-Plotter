@@ -66,13 +66,13 @@
             <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
                 <div class="flex items-center pl-3">
                     <input id="NOA" name = "cc" type="checkbox" onclick = "checkFunction('NOAAGML','NOA')" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                    <label for="NOA" class="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">HADCRUT5</label>
+                    <label for="NOA" class="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">NOAAGML</label>
                 </div>
             </li>
             <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
                 <div class="flex items-center pl-3">
                     <input id="SCR" name = "cc" type="checkbox" onclick = "checkFunction('SCRIPPS','SCR')" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                    <label for="SCR" class="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">CRUTEM5</label>
+                    <label for="SCR" class="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">SCRIPPS</label>
                 </div>
             </li>
         </ul>
@@ -123,37 +123,17 @@
               });
               if ($(check).is(':checked')) {
                 switch (id) {
-                  case 'HAD':
+                  case 'NOA':
                     console.log(id);
                     removeGraph();
                     createGraph(id);
                     break;
-                  case 'CRU':
+                  case 'SCR':
                     console.log(id);
                     removeGraph();
                     createGraph(id);
                     break;
-                  case 'GIS':
-                    console.log(id);
-                    removeGraph();
-                    createGraph(id);
-                    break;
-                  case 'HADCRU':
-                    console.log(id);
-                    removeGraph();
-                    createGraph(id);
-                    break;
-                  case 'CRUGIS':
-                    console.log(id);
-                    removeGraph();
-                    createGraph(id);
-                    break;
-                  case 'HADCRUGIS':
-                    console.log(id);
-                    removeGraph();
-                    createGraph(id);
-                    break;
-                  case 'HADGIS':
+                  case 'NOASCR':
                     console.log(id);
                     removeGraph();
                     createGraph(id);
@@ -199,7 +179,7 @@
 
 
             // Import JSON and Format Data 
-            d3.json("dataSets/data.json", function(data){
+            d3.json("dataSets/CO2data.json", function(data){
 
               // for (let i = 0; i < arguments.length; i++) {
               //   console.log(data.arguments[i]);
@@ -211,53 +191,26 @@
            
             
             switch(codeId){
-              case 'HAD':
+              case 'NOA':
                 arr1 = data.at(0);
-                arr2 = data.at(3);
+                arr2 = data.at(2);
                 var data = [];
                 data.push(arr1,arr2);
                 console.log(data);
                 break;
-              case 'CRU':
+              case 'SCR':
                 arr1 = data.at(1);
-                arr2 = data.at(3);
+                arr2 = data.at(2);
                 var data = [];
                 data.push(arr1,arr2);
                 console.log(data);
                 break;
-              case 'GIS':
-                arr1 = data.at(2);
-                arr2 = data.at(3);
-                var data = [];
-                data.push(arr1,arr2);
-                console.log(data);
-                break;
-              case 'HADCRU':
+              case 'NOASCR':
                 arr1 = data.at(0);
                 arr2 = data.at(1);
-                
                 var data = [];
                 data.push(arr1,arr2);
                 console.log(data);
-                break;
-              case 'HADGIS':
-                arr1 = data.at(0);
-                arr2 = data.at(2);
-                
-                var data = [];
-                data.push(arr1,arr2);
-                console.log(data);
-                break;
-              case 'CRUGIS':
-                arr1 = data.at(1);
-                arr2 = data.at(2);
-                
-                var data = [];
-                data.push(arr1,arr2);
-                console.log(data); 
-                break;
-              case 'HADCRUGIS':
-                data = data;
                 break; 
             }
             
@@ -266,8 +219,8 @@
             
             data.forEach(function(d) {
               d.values.forEach(function(d) {
-                d.date = parseDate(d.date);
-                d.anomaly = +d.anomaly;
+                d.Date = parseDate(d.Date);
+                d.PPM = +d.PPM;
               });
             });
 
@@ -275,11 +228,11 @@
 
             // Scale
             var xScale = d3.scaleTime()
-              .domain(d3.extent(data[0].values, d => d.date))
+              .domain(d3.extent(data[0].values, d => d.Date))
               .range([0, width-margin]);
 
             var yScale = d3.scaleLinear()
-              .domain([-1, d3.max(data[1].values, d => d.anomaly)])
+              .domain(d3.extent(data[1].values, d => d.PPM))
               .range([height-margin, 0]);
 
           
@@ -304,8 +257,8 @@
 
             // Add line into svg
             var line = d3.line()
-              .x(d => xScale(d.date))
-              .y(d => yScale(d.anomaly));
+              .x(d => xScale(d.Date))
+              .y(d => yScale(d.PPM));
             
             
             let lines = svg.append('g')
@@ -378,9 +331,9 @@
                   .append("text")
                   .attr("class", "text")
                   // Round value to 2 decimal places
-                  .text(`${(Math.round((d.anomaly + Number.EPSILON)*100)/100)}`)
-                  .attr("x", d => xScale(d.date))
-                  .attr("y", d => yScale(d.anomaly));
+                  .text(`${(Math.round((d.PPM + Number.EPSILON)*100)/100)}`)
+                  .attr("x", d => xScale(d.Date))
+                  .attr("y", d => yScale(d.PPM));
               })
             .on("mouseout", function(d) {
               d3.select(this)
@@ -390,8 +343,8 @@
                 .selectAll(".text").remove();
             })  
             .append("circle")
-            .attr("cx", d => xScale(d.date))
-            .attr("cy", d => yScale(d.anomaly))
+            .attr("cx", d => xScale(d.Date))
+            .attr("cy", d => yScale(d.PPM))
             .attr("r", circleRadius)
             .style('opacity', circleOpacity)
             .on("mouseover", function(d) {
@@ -435,16 +388,7 @@
             .attr("y",15)
             .attr("fill", "#000")
             .attr("transform","rotate(-90)")
-            .text("Temperature Anomaly");
-
-          // zero line  
-          svg.append("g")
-            .attr("transform", "translate(0, "+ yScale(0)+")")
-            .append("line")
-            .attr("x2",(width-50))
-            .style('stroke','grey')
-            .style("stroke-dasharray", "5, 3")
-            .style("stroke-width","2px");
+            .text("CO2 Parts per million");
 
             })
           }
