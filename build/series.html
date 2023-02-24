@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Climate Tool</title>
+    <link rel="stylesheet" href="/dist/output.css">
+    <script src = "https://d3js.org/d3.v4.js"></script>
+    <script src="https://npmcdn.com/simple-statistics@2.0.0-beta3/dist/simple-statistics.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.js"></script>
+    <!-- <script src="https://unpkg.com/d3-regression@1.3.10/dist/d3-regression.min.js"></script> -->
+
+
+</head>
+<body class = "min-h-screen bg-slate-50 dark:bg-black dark:text-white">
+    <header class = "bg-teal-700 text-white sticky top-0 z-10">
+       <section class="max-w-4xl mx-auto p-4 flex justify-between items-center">
+            <h1 class="text-3xl font-medium">
+                <a>
+                    The Climate Tool
+                </a>
+            </h1>
+
+            <div>
+                <button id="mobile-open-button" class="text-3xl sm:hidden focus:outline-none">
+                    &#9776;
+                </button>
+                <nav class="hidden sm:block space-x-8 text-xl" aria-label="main">
+                    <a href="index.html" class="link hover:opacity-90">Home</a>
+                    <a href="temperature.html" class="link hover:opacity-90">Temp</a>
+                    <a href="tempCombined.html" class="link hover:opacity-90">TempSeries</a>
+                    <a href="CO2combined.html" class="link hover:opacity-90">C02</a>
+                    <a href="seaice.html" class="link hover:opacity-90">Sea Ice</a>
+                    <!-- <a href="#sources" class="link hover:opacity-90">Sources</a>
+                    <a href="#contact" class="link hover:opacity-90">Contact </a> -->
+                </nav>
+            </div>
+       </section> 
+    </header>
+    
+    <main class="max-w-4xl mx-auto">
+      
+      <!-- <label for="datasets" class="p-1 block mb-2 text-sm font-medium text-gray-900 dark:text-white">Data source</label>
+        <select id="dataSets" onchange = "dataChange()" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+          <option selected>--Choose data source--</option>
+          <option value="1">CRUTEM5</option>
+          <option value="2">HADCRUT5</option>
+          <option value="3">GISTEMP</option>
+        </select>
+
+      
+
+      <label for="processSteps" class="p-1 block mb-2 text-sm font-medium text-gray-900 dark:text-white">Processing steps</label>
+        <select id="processSteps" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-40 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+          <option selected>--</option>
+          <option value="LT">Linear trend</option>
+          <option value="AV">Average</option>
+          <option value="NM">Normalise</option>
+        </select> -->
+
+
+        
+        <h3 class="mb-4 font-semibold text-gray-900 dark:text-white pt-6">Dataset</h3>
+        <ul class="items-center w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg sm:flex dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+            <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
+                <div class="flex items-center pl-3">
+                    <input id="NOA" name = "cc" type="checkbox" onclick = "checkFunction('NOAAGML','NOA')" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+                    <label for="NOA" class="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">NOAAGML</label>
+                </div>
+            </li>
+            <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
+                <div class="flex items-center pl-3">
+                    <input id="SCR" name = "cc" type="checkbox" onclick = "checkFunction('SCRIPPS','SCR')" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+                    <label for="SCR" class="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">SCRIPPS</label>
+                </div>
+            </li>
+        </ul>
+
+        
+        <!-- <label for = "HAD"><span></span>HADCRUT5</label>
+        <input type = "checkbox" id = "HAD" name = "cc" onclick = "checkFunction('HADCRUT5','HAD')">
+        <br/>
+        <label for = "CRU"><span></span>CRUTEM5</label>
+        <input type = "checkbox" id = "CRU" name = "cc" onclick = "checkFunction('CRUTEM5','CRU')">
+        <br/>
+        <label for = "GIS"><span></span>GISTEMP4</label>
+        <input type = "checkbox" id = "GIS" name = "cc" onclick = "checkFunction('GISTEMP4','GIS')">
+        <br/> -->
+
+        <button id = "plot" type = "button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">Plot</button>
+
+
+        
+        <p id = "demo" class = "p-1"></p>
+        <div id="chart"></div>
+
+        
+
+        
+
+        <script>
+
+          
+
+            function checkFunction(dataSet,ID) {
+              var CB = document.getElementById(ID);
+              var text = document.getElementById(dataSet);
+
+
+              if (CB.checked == true){
+                text.style.display = "block";
+              } else {
+                text.style.display = "none";
+              }
+            }
+
+            
+
+            $("#plot").on("click", function(){
+              var check = $('input:checked:checkbox[name=cc]');
+              var id = '';
+              $.each($(check), function(index) {
+                id += $(this).attr('id');
+              });
+              if ($(check).is(':checked')) {
+                switch (id) {
+                  case 'NOA':
+                    console.log(id);
+                    removeGraph();
+                    createGraph(id);
+                    break;
+                  case 'SCR':
+                    console.log(id);
+                    removeGraph();
+                    createGraph(id);
+                    break;
+                  case 'NOASCR':
+                    console.log(id);
+                    removeGraph();
+                    createGraph(id);
+                    break;
+                }
+              } else {
+                removeGraph();
+                alert('Please select one or more datasets');
+              }
+            });
+
+            function removeGraph()
+            {
+              d3.selectAll("svg").remove();
+            }
+
+
+
+            function createGraph(codeId){
+            // var data = d3.json("dataSets/data.json", function(d) {
+              
+            //   array1 = d.at(1) 
+            //   array2 = d.at(2);
+            //   array3 = {array1,array2};
+            //   console.log(array3);
+            // });
+
+            var width = 900;
+            var height = 600;
+            var margin = 50;
+            var duration = 100;
+
+            var lineOpacity = "0.25";
+            var lineOpacityHover = "0.85";
+            var otherLinesOpacityHover = "0.1";
+            var lineStroke = "1.5px";
+            var lineStrokeHover = "2.5px";
+
+            var circleOpacity = '0.85';
+            var circleOpacityOnLineHover = "0.25"
+            var circleRadius = 3;
+            var circleRadiusHover = 6;
+
+
+            // Import JSON and Format Data 
+            d3.json("dataSets/CO2data.json", function(data){
+
+              // for (let i = 0; i < arguments.length; i++) {
+              //   console.log(data.arguments[i]);
+              // } 
+              
+            console.log(codeId);
+            console.log(data);
+
+           
+            
+            switch(codeId){
+              case 'NOA':
+                arr1 = data.at(0);
+                arr2 = data.at(2);
+                var data = [];
+                data.push(arr1,arr2);
+                console.log(data);
+                break;
+              case 'SCR':
+                arr1 = data.at(1);
+                arr2 = data.at(2);
+                var data = [];
+                data.push(arr1,arr2);
+                console.log(data);
+                break;
+              case 'NOASCR':
+                arr1 = data.at(0);
+                arr2 = data.at(1);
+                var data = [];
+                data.push(arr1,arr2);
+                console.log(data);
+                break; 
+            }
+            
+
+            var parseDate = d3.timeParse("%Y");
+            
+            data.forEach(function(d) {
+              d.values.forEach(function(d) {
+                d.Date = parseDate(d.Date);
+                d.PPM = +d.PPM;
+              });
+            });
+
+            
+
+            // Scale
+            var xScale = d3.scaleTime()
+              .domain(d3.extent(data[0].values, d => d.Date))
+              .range([0, width-margin]);
+
+            var yScale = d3.scaleLinear()
+              .domain(d3.extent(data[1].values, d => d.PPM))
+              .range([height-margin, 0]);
+
+          
+
+
+
+            // var tooltip = d3.select("#chart")
+            //   .append("div")
+            //   .style("opacity",0)
+            //   .attr("class","tooltip")
+            //   .style("background-color","white")
+            //   .style("border","solid")
+            //   .style("")
+
+            var color = d3.scaleOrdinal(d3.schemeCategory10);
+
+            var svg = d3.select("#chart").append("svg")
+              .attr("width", (width+margin)+"px")
+              .attr("height", (height+margin)+"px")
+              .append('g')
+              .attr("transform", `translate(${margin}, ${margin})`);
+
+            // Add line into svg
+            var line = d3.line()
+              .x(d => xScale(d.Date))
+              .y(d => yScale(d.PPM));
+            
+            
+            let lines = svg.append('g')
+              .attr('class', 'lines');
+
+
+            // Top text  
+            lines.selectAll('.line-group')
+              .data(data).enter()
+              .append('g')
+              .attr('class', 'line-group')
+              // Appear on when mouse over line
+              .on("mouseover", function(d,i){
+                svg.append("text")
+                  .attr("class", "title-text")
+                  .style("fill",color(i))
+                  // name of dataset
+                  .text(d.name)
+                  .attr("text-anchor", "middle")
+                  .attr("x", (width-margin)/2)
+                  .attr("y",5);
+              })
+            // Remove when mouse leaves
+            .on("mouseout",function(d){
+              svg.select(".title-text").remove();
+            })
+
+            
+            .append('path')
+            .attr('class','line')
+            .attr('d', d => line(d.values))
+            .style('stroke', (d,i) => color(i))
+            .style('opacity', lineOpacity)
+            .style("stroke-width",2)
+            .style("fill","none")
+            .on("mouseover", function(d){
+                d3.selectAll('.line')
+                  .style('opacity', otherLinesOpacityHover);
+                d3.selectAll('.circle')
+                  .style('opacity', circleOpacityOnLineHover);
+                d3.select(this)
+                  .style('opacity', lineOpacityHover)
+                  .style("stroke-width", lineStrokeHover)
+                  .style("cursor", "pointer");
+            })
+            .on("mouseout", function(d) {
+              d3.selectAll(".line")
+                .style('opacity', lineOpacity)
+                .style("stroke-width",2)
+                .style("fill","none");
+              d3.selectAll('.circle')
+                .style('opacity', circleOpacity);
+              d3.select(this)
+                .style("stroke-width", lineStroke)
+                .style("cursor", "none");
+            });
+
+            // Add circles in the line
+            lines.selectAll("circle-group")
+              .data(data).enter()
+              .append("g")
+              .style("fill", (d, i) => color(i))
+              .selectAll("circle")
+              .data(d => d.values).enter()
+              .append("g")
+              .attr("class", "circle")
+              .on("mouseover", function(d){
+                d3.select(this)
+                  .style("cursor", "pointer")
+                  .append("text")
+                  .attr("class", "text")
+                  // Round value to 2 decimal places
+                  .text(`${(Math.round((d.PPM + Number.EPSILON)*100)/100)}`)
+                  .attr("x", d => xScale(d.Date))
+                  .attr("y", d => yScale(d.PPM));
+              })
+            .on("mouseout", function(d) {
+              d3.select(this)
+                .style("cursor", "none")
+                .transition()
+                .duration(duration)
+                .selectAll(".text").remove();
+            })  
+            .append("circle")
+            .attr("cx", d => xScale(d.Date))
+            .attr("cy", d => yScale(d.PPM))
+            .attr("r", circleRadius)
+            .style('opacity', circleOpacity)
+            .on("mouseover", function(d) {
+              d3.select()
+                .transition()
+                .duration(duration)
+                .attr("r", circleRadiusHover);
+            
+            })
+
+            .on("mouseout", function(d) {
+              d3.select(this)
+                .transition()
+                .duration(duration)
+                .attr("r", circleRadius);
+            });
+
+          
+          
+          // Add axis into SVG
+          var xAxis = d3.axisBottom(xScale).ticks(5);
+          var yAxis = d3.axisLeft(yScale).ticks(5);
+
+          
+         
+          
+          // X Label
+          svg.append("g")
+            .attr("class", "x axis")
+            .attr("text-anchor","end")
+            .attr("transform", `translate(0, ${height-margin})`)
+            .text("Year")
+            .call(xAxis);
+            
+
+          // Y Label
+          svg.append("g")
+            .attr("class", "y axis")
+            .call(yAxis)
+            .append('text')
+            .attr("y",15)
+            .attr("fill", "#000")
+            .attr("transform","rotate(-90)")
+            .text("CO2 Parts per million");
+
+            })
+          }
+          
+            
+            </script>
+
+
+
+    </main>
+    
+</body>
+</html>
