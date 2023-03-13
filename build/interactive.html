@@ -1,0 +1,688 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        font-family: sans-serif;
+      }
+      .chartMenu {
+        width: 100vw;
+        height: 40px;
+        background: #1A1A1A;
+        color: rgba(54, 162, 235, 1);
+      }
+      .chartMenu p {
+        padding: 10px;
+        font-size: 20px;
+      }
+      .chartCard {
+        width: 100vw;
+        height: calc(100vh - 40px);
+        background: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .chartBox {
+        width: 1200px;
+        padding: 20px;
+        border-radius: 20px;
+        
+        background: white;
+      }
+    </style>
+  </head>
+  <body>
+    
+    <div class="chartCard">
+      <div class="chartBox">
+        <canvas id="myChart"></canvas>
+
+        <!-- <button onClick = "stock(0)">Tesla</button>
+        <button onClick = "stock(1)">Ford</button>
+        <button onClick = "stock(2)">Toyota</button> -->
+      </div>
+      <td class = "forms">
+        <form  action = "" method = "POST">
+          <table class = "series">
+            <tbody>
+              <tr>
+                <td class = "series">
+                  <table class = "steps-series1">
+                    <tbody>
+                      <tr>
+                        <th>&nbsp;</th>
+                        <th colspan = "2">Data source</th>
+                      </tr>
+                      <tr>
+                        <th>&nbsp;</th>
+                        <td colspan="2">
+                          <select id = "source1">
+                            <option value class = "header">-- Choose data source --</option>
+                            <option value = "CRU">CRUTEM5</option>
+                            <option value = "HAD">HADCRUT5</option>
+                            <option value = "GIS">GISTEMP4</option>
+                          </select>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>&nbsp;</th>
+                        <th>Processing steps</th>
+                        <th>Value</th>
+                      </tr>
+
+                      <tr>
+                        <td class = "step-index">1</td>
+                        <td>
+                          <select name = "steps0[]">
+                            <option value class = "header">-- Choose processing step --</option>
+                            <option value = "from" class = "option">From (time)</option>
+                            <option value = "to" class = "option">To (time)</option>
+                            <option value = "last" class = "option">Last (samples)</option>
+                            <option value = "every" class = "option">Every (samples)</option>
+                            <option value = "normalise" class = "option">Normalise</option>
+                            <option value = "trend" class = "option">Linear trend</option>
+                          </select>
+                        </td>
+                        <td>
+                          <input name = "values0[]" size = "10" value>
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td class = "step-index">2</td>
+                        <td>
+                          <select name = "steps0[]">
+                            <option value class = "header">-- Choose processing step --</option>
+                            <option value = "from" class = "option">From (time)</option>
+                            <option value = "to" class = "option">To (time)</option>
+                            <option value = "last" class = "option">Last (samples)</option>
+                            <option value = "every" class = "option">Every (samples)</option>
+                            <option value = "normalise" class = "option">Normalise</option>
+                            <option value = "trend" class = "option">Linear trend</option>
+                          </select>
+                        </td>
+                        <td>
+                          <input name = "values0[]" size = "10" value>
+                        </td>
+
+                      </tr>
+
+                      <tr>
+                        <td class = "step-index">3</td>
+                        <td>
+                          <select name = "steps0[]">
+                            <option value class = "header">-- Choose processing step --</option>
+                            <option value = "from" class = "option">From (time)</option>
+                            <option value = "to" class = "option">To (time)</option>
+                            <option value = "last" class = "option">Last (samples)</option>
+                            <option value = "every" class = "option">Every (samples)</option>
+                            <option value = "normalise" class = "option">Normalise</option>
+                            <option value = "trend" class = "option">Linear trend</option>
+                          </select>
+                        </td>
+                        <td>
+                          <input name = "values0[]" size = "10" value>
+                        </td>
+                      </tr>
+
+                    </tbody>
+                  
+                    <tbody class = "steps-series2">
+                      <tr>
+                        <th>&nbsp;</th>
+                        <th colspan = "2">Data source</th>
+                      </tr>
+                      <tr>
+                        <th>&nbsp;</th>
+                        <td colspan="2">
+                          <select name = "source2">
+                            <option value class = "header">-- Choose data source --</option>
+                            <option value = "CRU">CRUTEM5</option>
+                            <option value = "HAD">HADCRUT5</option>
+                            <option value = "GIS">GISTEMP4</option>
+                          </select>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>&nbsp;</th>
+                        <th>Processing steps</th>
+                        <th>Value</th>
+                      </tr>
+
+                      <tr>
+                        <td class = "step-index">1</td>
+                        <td>
+                          <select name = "steps0[]">
+                            <option value class = "header">-- Choose processing step --</option>
+                            <option value = "from" class = "option">From (time)</option>
+                            <option value = "to" class = "option">To (time)</option>
+                            <option value = "last" class = "option">Last (samples)</option>
+                            <option value = "every" class = "option">Every (samples)</option>
+                            <option value = "normalise" class = "option">Normalise</option>
+                            <option value = "trend" class = "option">Linear trend</option>
+                          </select>
+                        </td>
+                        <td>
+                          <input name = "values0[]" size = "10" value>
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td class = "step-index">2</td>
+                        <td>
+                          <select name = "steps0[]">
+                            <option value class = "header">-- Choose processing step --</option>
+                            <option value = "from" class = "option">From (time)</option>
+                            <option value = "to" class = "option">To (time)</option>
+                            <option value = "last" class = "option">Last (samples)</option>
+                            <option value = "every" class = "option">Every (samples)</option>
+                            <option value = "normalise" class = "option">Normalise</option>
+                            <option value = "trend" class = "option">Linear trend</option>
+                          </select>
+                        </td>
+                        <td>
+                          <input name = "values0[]" size = "10" value>
+                        </td>
+
+                      </tr>
+
+                      <tr>
+                        <td class = "step-index">3</td>
+                        <td>
+                          <select name = "steps0[]">
+                            <option value class = "header">-- Choose processing step --</option>
+                            <option value = "from" class = "option">From (time)</option>
+                            <option value = "to" class = "option">To (time)</option>
+                            <option value = "last" class = "option">Last (samples)</option>
+                            <option value = "every" class = "option">Every (samples)</option>
+                            <option value = "normalise" class = "option">Normalise</option>
+                            <option value = "trend" class = "option">Linear trend</option>
+                          </select>
+                        </td>
+                        <td>
+                          <input name = "values0[]" size = "10" value>
+                        </td>
+                      </tr>
+
+                    </tbody>
+                  
+                  
+                    <tbody class = "steps-series3">
+                      <tr>
+                        <th>&nbsp;</th>
+                        <th colspan = "2">Data source</th>
+                      </tr>
+                      <tr>
+                        <th>&nbsp;</th>
+                        <td colspan="2">
+                          <select name = "source3">
+                            <option value class = "header">-- Choose data source --</option>
+                            <option value = "CRU">CRUTEM5</option>
+                            <option value = "HAD">HADCRUT5</option>
+                            <option value = "GIS">GISTEMP4</option>
+                          </select>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>&nbsp;</th>
+                        <th>Processing steps</th>
+                        <th>Value</th>
+                      </tr>
+
+                      <tr>
+                        <td class = "step-index">1</td>
+                        <td>
+                          <select name = "steps0[]">
+                            <option value class = "header">-- Choose processing step --</option>
+                            <option value = "from" class = "option">From (time)</option>
+                            <option value = "to" class = "option">To (time)</option>
+                            <option value = "last" class = "option">Last (samples)</option>
+                            <option value = "every" class = "option">Every (samples)</option>
+                            <option value = "normalise" class = "option">Normalise</option>
+                            <option value = "trend" class = "option">Linear trend</option>
+                          </select>
+                        </td>
+                        <td>
+                          <input name = "values0[]" size = "10" value>
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td class = "step-index">2</td>
+                        <td>
+                          <select name = "steps0[]">
+                            <option value class = "header">-- Choose processing step --</option>
+                            <option value = "from" class = "option">From (time)</option>
+                            <option value = "to" class = "option">To (time)</option>
+                            <option value = "last" class = "option">Last (samples)</option>
+                            <option value = "every" class = "option">Every (samples)</option>
+                            <option value = "normalise" class = "option">Normalise</option>
+                            <option value = "trend" class = "option">Linear trend</option>
+                          </select>
+                        </td>
+                        <td>
+                          <input name = "values0[]" size = "10" value>
+                        </td>
+
+                      </tr>
+
+                      <tr>
+                        <td class = "step-index">3</td>
+                        <td>
+                          <select name = "steps0[]">
+                            <option value class = "header">-- Choose processing step --</option>
+                            <option value = "from" class = "option">From (time)</option>
+                            <option value = "to" class = "option">To (time)</option>
+                            <option value = "last" class = "option">Last (samples)</option>
+                            <option value = "every" class = "option">Every (samples)</option>
+                            <option value = "normalise" class = "option">Normalise</option>
+                            <option value = "trend" class = "option">Linear trend</option>
+                          </select>
+                        </td>
+                        <td>
+                          <input name = "values0[]" size = "10" value>
+                        </td>
+                      </tr>
+
+                    </tbody>
+                  </table>
+                  
+                </td>
+              </tr>
+              <tr>
+                <td class = "submit" colspan = "3"> 
+                  <input type = "submit" name = "plot" value = "Plot" >
+                  <input type = "submit" name = "add" value = "Add series" id = "add">
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          
+          
+
+          
+        </form>
+        </td>
+    </div>
+
+    <div>
+      <button id = "plot">Plot</button>
+    </div>
+
+    
+    
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js"></script>
+    
+    <script>
+
+    
+
+    var CRU = "dataSets/CRUTEM5.csv";
+    var HAD = "dataSets/HADCRUT5.csv";
+    var GIS = "dataSets/GISTEMP4.csv";
+    var data4 = "dataSets/HadCRUT.5.0.csv";
+
+    const palette = {
+      0: 'rgba(255, 26, 104, 1)',
+      1: 'rgba(52 ,162, 235, 1)',
+      2: 'rgba(255, 159, 64, 1)',
+      3: 'rgba(153, 102, 255, 1)',
+      4: 'rgba(255, 99, 132, 1)',
+      5: 'rgba(54, 162, 235, 1)',
+      6: 'rgba(255, 206, 86, 1)',
+      7: 'rgba(75, 192, 192, 1)',
+      8: 'rgba(153, 102, 255, 1)',
+      9: 'rgba(255, 159, 64, 1)'
+    }  
+   
+    var data = {
+      labels: [],
+      datasets: []
+    };
+
+    let myChart;
+
+    var datapoints;
+
+   
+    
+    async function dataFrom(dataSource1, dataStart){
+      const datapoints = await getData(dataSource1);
+      name = datapoints.name;
+      
+      // remove all the data before the start date
+
+      const startIndex = datapoints.labelArray.indexOf(dataStart);
+      //console.log(startIndex);
+
+      const labelArray = datapoints.labelArray.slice(startIndex);
+      const dataArray = datapoints.dataArray.slice(startIndex);
+
+      //console.log(labelArray);
+      //console.log(dataArray);
+
+      return {name, labelArray, dataArray};
+    }
+
+    //dataFrom(GIS, "1980");
+
+    
+
+    async function trend(dataSource1){
+      
+      const datapoints = await getData(dataSource1);
+
+      name = datapoints.name;
+      labelArray = datapoints.labelArray;
+
+
+      const size = datapoints.dataArray.length;
+
+      var sumX = 0;
+      var sumY = 0;
+      var sumXY = 0;
+      var sumXX = 0;
+
+      for (var i = 0; i < size; i++){
+        var x = i;
+        var y = datapoints.dataArray[i];
+        // console.log(y);
+        sumX += x;
+        sumY += y;
+        sumXY += x * y;
+        sumXX += x * x;
+      }
+
+      
+
+      var slope = ((sumX * sumY) - (size*sumXY)) / ((sumX * sumX) - (size*sumXX));
+      var intercept = (sumY - (slope * sumX)) / size;
+
+      console.log(math.complex(slope));
+      console.log(intercept);
+
+      
+
+      return {name, dataArray , labelArray}; 
+
+    }
+
+
+
+    async function dataTo(dataSource1, dataEnd){
+      const datapoints = await getData(dataSource1);
+      name = datapoints.name;
+      // remove all the data after the end date
+
+      const endIndex = datapoints.labelArray.indexOf(dataEnd);
+      //console.log(endIndex);
+
+      const labelArray = datapoints.labelArray.slice(0, endIndex + 1);
+      const dataArray = datapoints.dataArray.slice(0, endIndex + 1);
+
+      //console.log(labelArray);
+
+      return {name, labelArray, dataArray};
+
+      
+    }
+
+   
+
+    async function getData(dataSource) {
+      const labelArray = [];
+      const dataArray = [];
+      const name = dataSource.split("/")[1].split(".")[0];
+
+      const response = await fetch(dataSource);
+      const tableData = await response.text();
+
+      const table = tableData.split("\n").slice(1);
+      //console.log(table);
+
+      table.forEach(row => {
+
+        const column = row.split(",");
+        const year = column[0];
+        const dataValue = Math.round (column[1] * 100) / 100;
+
+        labelArray.push(year);
+        dataArray.push(dataValue);
+      });
+      //console.log(name);  
+      //console.log(labelArray);
+      //console.log(dataArray);
+      
+      return {name, labelArray, dataArray};
+    }
+
+    var name;
+    let labelArray = [];
+    let dataArray = [];
+
+    async function syncronise(dataSource1) {
+      datapoints = await getData (dataSource1);
+
+      name = datapoints.name;
+      labelArray.push(datapoints.labelArray); 
+      dataArray.push(datapoints.dataArray);
+      
+      
+    }
+
+    
+    syncronise(GIS);
+
+    labelArray = labelArray.flat();
+
+    console.log(name);
+    console.log(labelArray);
+    
+    console.log(dataArray);
+
+    // function dataSet(name, dataArray, labelArray) {
+    //   this.name = name;
+    //   this.dataArray = dataArray;
+    //   this.labelArray = labelArray;
+    // }
+
+    // var dataSet1 = new dataSet(name, dataArray, labelArray);
+
+    // console.log(dataSet1);
+
+
+    async function drawChart(dataSource1, dataSource2, dataSource3 ) {
+
+      var datapoints = await getData(dataSource1);
+      // var datapoints = await dataTo(dataSource1, "2010");
+      
+      
+      //const datapoints = await getData(dataSource1);
+      // get the length of the label array
+      const labelLength = datapoints.labelArray.length;
+      //console.log(labelLength);
+
+      const dataset1 = {
+        label: datapoints.name,
+        data: datapoints.dataArray,
+        fill: false,
+        borderColor: palette[0],
+        tension: 0.1,
+        borderWidth: 2
+      };
+      
+      var datapoints2;
+      var dataset2;
+      if (dataSource2 != null) {
+        datapoints2 = await getData(dataSource2);
+        // get the length of the label array
+        const labelLength = datapoints2.labelArray.length;
+        //console.log(labelLength);
+        //console.log(datapoints2);
+
+        dataset2 = {
+        label: datapoints2.name,
+        data: datapoints2.dataArray,
+        fill: false,
+        borderColor: palette[1],
+        tension: 0.1,
+        borderWidth: 2
+      };
+      }
+
+      
+
+      var datapoints3; 
+      var dataset3;
+      if (dataSource3 != null) {
+        datapoints3 = await getData(dataSource3);
+        // get the length of the label array
+        const labelLength = datapoints3.labelArray.length;
+        console.log(labelLength);
+        console.log(datapoints3);
+
+        dataset3 = {
+        label: datapoints3.name,
+        data: datapoints3.dataArray,
+        fill: false,
+        borderColor: palette[2],
+        tension: 0.1,
+        borderWidth: 2
+      };
+      }
+
+      
+
+      const data = {
+        labels: datapoints.labelArray,
+        datasets: []
+      };
+
+
+      // find array with the longest lenghth
+
+      var longestArray = datapoints.labelArray;
+
+      if (datapoints2 != null) {
+        if (datapoints2.labelArray.length > longestArray.length) {
+          longestArray = datapoints2.labelArray;
+        }
+      }
+
+      if (datapoints3 != null) {
+        if (datapoints3.labelArray.length > longestArray.length) {
+          longestArray = datapoints3.labelArray;
+        }
+      }
+
+      console.log(longestArray.length);
+
+      // add the longest array of labels to the data object
+
+      data.labels = longestArray;
+
+      // make sure all arrays are the same length by adding null values to the start of the shorter arrays
+
+      if (datapoints.labelArray.length < longestArray.length) {
+        var difference = longestArray.length - datapoints.labelArray.length;
+        for (i = 0; i < difference; i++) {
+          datapoints.dataArray.unshift(null);
+        }
+      }
+
+      if (datapoints2 != null) {
+        if (datapoints2.labelArray.length < longestArray.length) {
+          var difference = longestArray.length - datapoints2.labelArray.length;
+          for (i = 0; i < difference; i++) {
+            datapoints2.dataArray.unshift(null);
+          }
+        }
+      }
+
+      if (datapoints3 != null) {
+        if (datapoints3.labelArray.length < longestArray.length) {
+          var difference = longestArray.length - datapoints3.labelArray.length;
+          for (i = 0; i < difference; i++) {
+            datapoints3.dataArray.unshift(null);
+          }
+        }
+      }
+
+      // add the data arrays to the data object
+
+
+
+      data.datasets.push(dataset1);
+      
+
+      if (datapoints2 != null) {
+        data.datasets.push(dataset2);
+      }
+
+      if (datapoints3 != null) {
+        data.datasets.push(dataset3);
+      }
+      
+      
+      
+    
+      // log the labels and data arrays to the console
+
+      console.log(data.labels);
+      console.log(data.datasets[0].data);
+      
+      
+      var config = {
+        type: 'line',
+        labels: datapoints.labelArray,
+        data,
+        options: {
+          elements: {
+            point: {
+              radius: 0
+            }
+          },  
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      };
+
+      
+      if (myChart) {
+        myChart.destroy();
+        myChart = new Chart(
+          document.getElementById('myChart'),
+          config
+        );
+      } else {
+        myChart = new Chart(
+          document.getElementById('myChart'),
+          config
+        );
+      }
+    
+    
+  };
+
+  drawChart(GIS);
+
+  var plot = document.getElementById("plot");
+  plot.addEventListener("click", function() {
+    drawChart(GIS, HAD, CRU);
+  });
+ 
+  
+    </script>
+
+  </body>
+<html>
+
